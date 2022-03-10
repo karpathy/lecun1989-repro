@@ -11,7 +11,7 @@ Since we don't have the exact dataset that was used in the paper, we take MNIST 
 $ python prepro.py
 ```
 
-Now we can attempt to reproduce the paper. The original network trained for 3 days, but my (Apple Silicon) MacBook Air 33 years later chunks through it in about 90 seconds (about 3000X speedup, hah):
+Now we can attempt to reproduce the paper. The original network trained for 3 days, but my (Apple Silicon M1) MacBook Air 33 years later chunks through it in about 90 seconds, even on single CPU core, and emulated. (I don't believe PyTorch and Apple M1 are friends just yet, but anyway still about 3000X speedup):
 
 ```
 $ python train.py
@@ -31,7 +31,7 @@ eval: split train. loss 2.5e-3. error 0.14%. misses: 10
 eval: split test. loss 1.8e-2. error 5%. misses: 102
 ```
 
-I expect that the majority of this discrepancy comes from the training dataset itself. We've only simulated the original dataset using what we have today 33 years later (MNIST). However, at least we're getting numbers on similar orders of magnitude...
+I expect that the majority of this discrepancy comes from the training dataset itself. We've only simulated the original dataset using what we have today 33 years later (MNIST). There are a number of other details that are not specified in the paper, so I also had to do some guessing (see notes below). For example, the specific sparse connectivity structure between layers H1 and H2 is not described, the paper just says that the inputs are "chosen according to a scheme that will not be dicussed here". Alternatively, the paper uses a "special version of Newton's algorithm that uses a positive, diagonal approximation of Hessian", but I only used simple SGD in this implementation because it is signficiantly simpler and, according to the paper, "this algorithm is not believed to bring a tremendous increase in learning speed". Anyway, we are getting numbers on similar orders of magnitude...
 
 #### notes
 
@@ -94,3 +94,4 @@ For tanh neurons the recommended gain is 5/3. So therefore we would have `a = sq
 
 - jupyter notebook to visualize the network and its features / predictions / mistakes etc.
 - modernize the network using knowledge from 33 years of time travel.
+- include my janky hyperparameter sweeping code for tuning the learning rate potentially
