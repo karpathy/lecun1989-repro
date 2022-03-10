@@ -11,10 +11,10 @@ Since we don't have the exact dataset that was used in the paper, we take MNIST 
 $ python prepro.py
 ```
 
-Now we can attempt to reproduce the paper. The original network trained for 3 days, but my (Apple Silicon M1) MacBook Air 33 years later chunks through it in about 90 seconds. (non-emulated arm64 but CPU only, I don't believe PyTorch and Apple M1 are best friends ever just yet, but anyway still about 3000X speedup):
+Now we can attempt to reproduce the paper. The original network trained for 3 days, but my (Apple Silicon M1) MacBook Air 33 years later chunks through it in about 90 seconds. (non-emulated arm64 but CPU only, I don't believe PyTorch and Apple M1 are best friends ever just yet, but anyway still about 3000X speedup). So now that we've run prepro we can run repro! (haha):
 
 ```
-$ python train.py
+$ python repro.py
 ```
 
 Running this prints (on the 23rd, final pass):
