@@ -92,6 +92,5 @@ For tanh neurons the recommended gain is 5/3. So therefore we would have `a = sq
 
 #### todos
 
-- jupyter notebook to visualize the network and its features / predictions / mistakes etc.
 - modernize the network using knowledge from 33 years of time travel.
 - include my janky hyperparameter sweeping code for tuning the learning rate potentially
