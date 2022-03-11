@@ -79,7 +79,7 @@ My notes from the paper:
 - Was any learning rate decay used? Not mentioned, I am assuming no.
 - Was any weight decay used? not mentioned, assuming no.
 - Is there a bug in the pdf where in weight init the fan in should have a square root? The pdf's formatting is a bit messed up. Assuming yes.
-- The paper does not say, but what exactly are the trargets? Assuming they are +1/-1 for pos/neg, as the output units have tanh too...
+- The paper does not say, but what exactly are the targets? Assuming they are +1/-1 for pos/neg, as the output units have tanh too...
 
 One more notes on the weight init conundrum. Eg the "Kaiming init" is:
 
