@@ -20,8 +20,8 @@ $ python repro.py
 Running this prints (on the 23rd, final pass):
 
 ```
-eval: split train. loss 3.929887e-03. error 0.62%. misses: 45
-eval: split test . loss 2.834199e-02. error 4.19%. misses: 84
+eval: split train. loss 4.073383e-03. error 0.62%. misses: 45
+eval: split test . loss 2.838382e-02. error 4.09%. misses: 82
 ```
 
 This is close but not quite the same as what the paper reports. To match the paper exactly we'd expect the following instead:

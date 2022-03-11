@@ -1,8 +1,8 @@
 """
 Running this script eventually gives:
 23
-eval: split train. loss 3.929887e-03. error 0.62%. misses: 45
-eval: split test . loss 2.834199e-02. error 4.19%. misses: 84
+eval: split train. loss 4.073383e-03. error 0.62%. misses: 45
+eval: split test . loss 2.838382e-02. error 4.09%. misses: 82
 """
 
 import os
@@ -24,11 +24,11 @@ class Net(nn.Module):
     def __init__(self):
         super().__init__()
 
+        # initialization as described in the paper to my best ability, but it doesn't look right...
+        winit = lambda fan_in, *shape: (torch.rand(*shape) - 0.5) * 2 * 2.4 / fan_in**0.5
+
         # H1 layer parameters and their initialization
-        fan_in = 5*5*1
-        up = 2.4 / fan_in**0.5
-        w = torch.rand(12, 1, 5, 5) * up * 2 - up # U[-2.4 * F, 2.4 * F]
-        self.H1w = nn.Parameter(w)
+        self.H1w = nn.Parameter(winit(5*5*1, 12, 1, 5, 5))
         self.H1b = nn.Parameter(torch.zeros(12, 8, 8)) # presumably init to zero for biases
         assert self.H1w.nelement() + self.H1b.nelement() == 1068
 
@@ -39,26 +39,17 @@ class Net(nn.Module):
         to differently overlapping groups of 8/12 input planes. We will implement this with 3
         separate convolutions that we concatenate the results of.
         """
-        fan_in = 5*5*8
-        up = 2.4 / fan_in**0.5
-        w = torch.rand(12, 8, 5, 5) * up * 2 - up
-        self.H2w = nn.Parameter(w)
+        self.H2w = nn.Parameter(winit(5*5*8, 12, 8, 5, 5))
         self.H2b = nn.Parameter(torch.zeros(12, 4, 4)) # presumably init to zero for biases
         assert self.H2w.nelement() + self.H2b.nelement() == 2592
 
         # H3 is a fully connected layer
-        fan_in = 4*4*12
-        up = 2.4 / fan_in**0.5
-        w = torch.rand(fan_in, 30) * up * 2 - up
-        self.H3w = nn.Parameter(w)
+        self.H3w = nn.Parameter(winit(4*4*12, 4*4*12, 30))
         self.H3b = nn.Parameter(torch.zeros(30))
         assert self.H3w.nelement() + self.H3b.nelement() == 5790
 
         # output layer is also fully connected layer
-        fan_in = 30
-        up = 2.4 / fan_in**0.5
-        w = torch.rand(fan_in, 10) * up * 2 - up
-        self.outw = nn.Parameter(w)
+        self.outw = nn.Parameter(winit(30, 30, 10))
         self.outb = nn.Parameter(-torch.ones(10)) # 9/10 targets are -1, so makes sense to init slightly towards it
         assert self.outw.nelement() + self.outb.nelement() == 310
 
