@@ -26,11 +26,15 @@ class Net(nn.Module):
 
         # initialization as described in the paper to my best ability, but it doesn't look right...
         winit = lambda fan_in, *shape: (torch.rand(*shape) - 0.5) * 2 * 2.4 / fan_in**0.5
+        macs = 0 # keep track of MACs (multiply accumulates)
+        acts = 0 # keep track of number of activations
 
         # H1 layer parameters and their initialization
         self.H1w = nn.Parameter(winit(5*5*1, 12, 1, 5, 5))
         self.H1b = nn.Parameter(torch.zeros(12, 8, 8)) # presumably init to zero for biases
         assert self.H1w.nelement() + self.H1b.nelement() == 1068
+        macs += (5*5*1) * (8*8) * 12
+        acts += (8*8) * 12
 
         # H2 layer parameters and their initialization
         """
@@ -42,16 +46,25 @@ class Net(nn.Module):
         self.H2w = nn.Parameter(winit(5*5*8, 12, 8, 5, 5))
         self.H2b = nn.Parameter(torch.zeros(12, 4, 4)) # presumably init to zero for biases
         assert self.H2w.nelement() + self.H2b.nelement() == 2592
+        macs += (5*5*8) * (4*4) * 12
+        acts += (4*4) * 12
 
         # H3 is a fully connected layer
         self.H3w = nn.Parameter(winit(4*4*12, 4*4*12, 30))
         self.H3b = nn.Parameter(torch.zeros(30))
         assert self.H3w.nelement() + self.H3b.nelement() == 5790
+        macs += (4*4*12) * 30
+        acts += 30
 
         # output layer is also fully connected layer
         self.outw = nn.Parameter(winit(30, 30, 10))
         self.outb = nn.Parameter(-torch.ones(10)) # 9/10 targets are -1, so makes sense to init slightly towards it
         assert self.outw.nelement() + self.outb.nelement() == 310
+        macs += 30 * 10
+        acts += 10
+
+        self.macs = macs
+        self.acts = acts
 
     def forward(self, x):
 
@@ -103,7 +116,10 @@ if __name__ == '__main__':
 
     # init a model
     model = Net()
-    print("number of params: ", sum(p.numel() for p in model.parameters())) # in paper total is 9,760
+    print("model stats:")
+    print("# params:      ", sum(p.numel() for p in model.parameters())) # in paper total is 9,760
+    print("# MACs:        ", model.macs)
+    print("# activations: ", model.acts)
 
     # init data
     Xtr, Ytr = torch.load('train1989.pt')
