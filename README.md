@@ -30,7 +30,7 @@ This is close but not quite the same as what the paper reports. To match the pap
 
 ```
 eval: split train. loss 2.5e-3. error 0.14%. misses: 10
-eval: split test. loss 1.8e-2. error 5%. misses: 102
+eval: split test . loss 1.8e-2. error 5.00%. misses: 102
 ```
 
 I expect that the majority of this discrepancy comes from the training dataset itself. We've only simulated the original dataset using what we have today 33 years later (MNIST). There are a number of other details that are not specified in the paper, so I also had to do some guessing (see notes below). For example, the specific sparse connectivity structure between layers H1 and H2 is not described, the paper just says that the inputs are "chosen according to a scheme that will not be dicussed here". Alternatively, the paper uses a "special version of Newton's algorithm that uses a positive, diagonal approximation of Hessian", but I only used simple SGD in this implementation because it is signficiantly simpler and, according to the paper, "this algorithm is not believed to bring a tremendous increase in learning speed". Anyway, we are getting numbers on similar orders of magnitude...
