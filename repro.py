@@ -1,8 +1,8 @@
 """
 Running this script eventually gives:
 23
-eval: split train. loss 3.993807e-03. error 0.60%. misses: 44
-eval: split test . loss 2.837104e-02. error 4.04%. misses: 81
+eval: split train. loss 3.929887e-03. error 0.62%. misses: 45
+eval: split test . loss 2.834199e-02. error 4.19%. misses: 84
 """
 
 import os
@@ -99,9 +99,12 @@ if __name__ == '__main__':
     args = parser.parse_args()
     print(vars(args))
 
-    # inits
+    # init rng
     torch.manual_seed(1337)
     np.random.seed(1337)
+    torch.use_deterministic_algorithms(True)
+
+    # set up logging
     os.makedirs(args.output_dir, exist_ok=True)
     with open(os.path.join(args.output_dir, 'args.json'), 'w') as f:
         json.dump(vars(args), f, indent=2)
