@@ -1,6 +1,8 @@
 
 # lecun1989-repro
 
+![teaser](lecun1989.png)
+
 This code tries to reproduce the 1989 Yann LeCun et al. paper: [Backpropagation Applied to Handwritten Zip Code Recognition](http://yann.lecun.com/exdb/publis/pdf/lecun-89e.pdf). To my knowledge this is the earliest real-world application of a neural net trained with backpropagation (now 33 years ago).
 
 #### run
