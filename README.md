@@ -46,9 +46,9 @@ My notes from the paper:
 - network has three hidden layers H1 H2 H3
     - H1 is 5x5 stride 2 conv with 12 planes. constant padding of -1.
     - not "standard": units do not share biases! (including in the same feature plane)
-    - H1 has 768 units (8*8*12), 19,968 connections (768*26), 1,068 parameters (768 biases + 25*12 weights)
+    - H1 has 768 units (8\*8\*12), 19,968 connections (768\*26), 1,068 parameters (768 biases + 25\*12 weights)
     - not "standard": H2 units all draw input from 5x5 stride 2 conv but each only connecting to different 8 out of the 12 planes
-    - H2 contains 192 units (4*4*12), 38,592 connections (192 units * 201 input lines), 2,592 parameters (12 * 200 weights + 192 biases)
+    - H2 contains 192 units (4\*4\*12), 38,592 connections (192 units * 201 input lines), 2,592 parameters (12 * 200 weights + 192 biases)
     - H3 has 30 units fully connected to H2. So 5790 connections (30 * 192 + 30)
     - output layer has 10 units fully connected to H3. So 310 weights (30 * 10 + 10)
     - total: 1256 units, 64,660 connections, 9760 parameters
