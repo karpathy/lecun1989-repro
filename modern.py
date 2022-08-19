@@ -68,7 +68,7 @@ class Net(nn.Module):
 
         # H1 layer parameters and their initialization
         self.H1w = nn.Parameter(winit(5*5*1, 12, 1, 5, 5))
-        self.H1b = nn.Parameter(torch.zeros(12, 8, 8)) # presumably init to zero for biases
+        self.H1b = nn.Parameter(torch.zeros(12, 1, 1)) # presumably init to zero for biases
         macs += (5*5*1) * (8*8) * 12
         acts += (8*8) * 12
 
@@ -80,7 +80,7 @@ class Net(nn.Module):
         separate convolutions that we concatenate the results of.
         """
         self.H2w = nn.Parameter(winit(5*5*8, 12, 8, 5, 5))
-        self.H2b = nn.Parameter(torch.zeros(12, 4, 4)) # presumably init to zero for biases
+        self.H2b = nn.Parameter(torch.zeros(12, 1, 1)) # presumably init to zero for biases
         macs += (5*5*8) * (4*4) * 12
         acts += (4*4) * 12
 
