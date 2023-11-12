@@ -5,6 +5,68 @@ eval: split train. loss 4.073383e-03. error 0.62%. misses: 45
 eval: split test . loss 2.838382e-02. error 4.09%. misses: 82
 """
 
+# Net类：
+
+# class Net(nn.Module): 定义一个名为Net的类，它继承自nn.Module，用于构建神经网络。
+
+# def __init__(self): 定义类的初始化函数。
+
+# super().__init__(): 调用父类nn.Module的初始化函数。
+
+# winit = lambda fan_in, *shape: (torch.rand(*shape) - 0.5) * 2 * 2.4 / fan_in**0.5 定义一个lambda函数用于初始化权重。
+
+# macs = 0 和 acts = 0 初始化两个变量，用于跟踪MACs（乘法累加）和激活的数量。
+
+# self.H1w = nn.Parameter(winit(5*5*1, 12, 1, 5, 5)) 和 self.H1b = nn.Parameter(torch.zeros(12, 8, 8)) 初始化第一层的权重和偏置。
+
+# macs += (5*5*1) * (8*8) * 12 和 acts += (8*8) * 12 更新MACs和激活的数量。
+
+# 同样的方式初始化第二层和第三层的权重和偏置，以及更新MACs和激活的数量。
+
+# def forward(self, x): 定义前向传播函数。
+
+# x = F.pad(x, (2, 2, 2, 2), 'constant', -1.0) 对输入x进行填充。
+
+# x = F.conv2d(x, self.H1w, stride=2) + self.H1b 和 x = torch.tanh(x) 对x进行卷积操作和激活函数。
+
+# 同样的方式进行第二层和第三层的操作。
+
+# return x 返回输出。
+
+# if __name__ == '__main__':下的代码：
+
+# parser = argparse.ArgumentParser(description="Train a 1989 LeCun ConvNet on digits") 创建一个ArgumentParser对象。
+
+# parser.add_argument('--learning-rate', '-l', type=float, default=0.03, help="SGD learning rate") 和 parser.add_argument('--output-dir'   , '-o', type=str,   default='out/base', help="output directory for training logs") 添加命令行参数。
+
+# args = parser.parse_args() 解析命令行参数。
+
+# torch.manual_seed(1337) 和 np.random.seed(1337) 设置随机数种子。
+
+# os.makedirs(args.output_dir, exist_ok=True) 创建输出目录。
+
+# with open(os.path.join(args.output_dir, 'args.json'), 'w') as f: 和 json.dump(vars(args), f, indent=2) 将命令行参数保存到json文件。
+
+# model = Net() 初始化模型。
+
+# Xtr, Ytr = torch.load('train1989.pt') 和 Xte, Yte = torch.load('test1989.pt') 加载训练和测试数据。
+
+# optimizer = optim.SGD(model.parameters(), lr=args.learning_rate) 初始化优化器。
+
+# for pass_num in range(23): 进行23次训练。
+
+# model.train() 设置模型为训练模式。
+
+# x, y = Xtr[[step_num]], Ytr[[step_num]] 获取一个训练样本。
+
+# yhat = model(x) 和 loss = torch.mean((y - yhat)**2) 计算预测值和损失。
+
+# optimizer.zero_grad(set_to_none=True) 和 loss.backward() 和 optimizer.step() 计算梯度并更新参数。
+
+# eval_split('train') 和 eval_split('test') 评估训练和测试的错误和指标。
+
+# torch.save(model.state_dict(), os.path.join(args.output_dir, 'model.pt')) 将最终的模型保存到文件。
+
 import os
 import json
 import argparse
